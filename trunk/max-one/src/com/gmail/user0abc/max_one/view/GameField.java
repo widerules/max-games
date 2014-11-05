@@ -7,7 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import com.gmail.user0abc.max_one.GameController;
 import com.gmail.user0abc.max_one.R;
-import com.gmail.user0abc.max_one.model.MapTile;
+import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.util.Logger;
 
 import java.util.ArrayList;

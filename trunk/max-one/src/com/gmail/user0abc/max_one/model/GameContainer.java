@@ -1,7 +1,6 @@
 package com.gmail.user0abc.max_one.model;
 
-import com.gmail.user0abc.max_one.model.MapTile;
-import com.gmail.user0abc.max_one.model.Player;
+import com.gmail.user0abc.max_one.model.terrain.MapTile;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,4 +12,5 @@ public class GameContainer implements Serializable {
     public MapTile[][] map;
     public List<Player> players;
     public int seed;
+    public int movesCount=0;
 }

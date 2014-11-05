@@ -1,6 +1,10 @@
 package com.gmail.user0abc.max_one.util;
 
 import com.gmail.user0abc.max_one.model.*;
+import com.gmail.user0abc.max_one.model.terrain.MapTile;
+import com.gmail.user0abc.max_one.model.terrain.TerrainType;
+import com.gmail.user0abc.max_one.model.units.Unit;
+import com.gmail.user0abc.max_one.model.units.UnitType;
 
 import java.util.ArrayList;
 import java.util.List;
