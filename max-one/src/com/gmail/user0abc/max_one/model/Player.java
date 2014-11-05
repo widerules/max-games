@@ -8,4 +8,6 @@ import java.io.Serializable;
 public class Player implements Serializable {
     public boolean ai;
     public String name;
+    public int apples;
+    public int gold;
 }
