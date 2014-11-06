@@ -26,4 +26,9 @@ public class Worker extends Unit {
         actions.add(UnitActionType.DELETE_UNIT);
         return actions;
     }
+
+    @Override
+    public UnitType getUnitType() {
+        return UnitType.WORKER;
+    }
 }

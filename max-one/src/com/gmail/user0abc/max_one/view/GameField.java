@@ -21,18 +21,19 @@ public class GameField extends SurfaceView {
     private List<MotionEvent> recordedEvents = new ArrayList<>();
     private final SurfaceHolder holder;
     private Bitmap grass, water, worker, selection, tree, coin, apple;
-    private MapTile[][] map;
     float mapOffsetX = 0, mapOffsetY = 0;
     Integer selectedTileX, selectedTileY;
+    private GameController gameController;
 
     public GameField(Context context) {
         super(context);
+        gameController = (GameController)getContext();
         holder = getHolder();
         setClickable(true);
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                redraw();
+                //TODO implement method
             }
 
             @Override
@@ -54,7 +55,7 @@ public class GameField extends SurfaceView {
         apple = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
     }
 
-    private void redraw() {
+    public void redraw() {
         Canvas canvas = holder.lockCanvas(null);
         draw(canvas);
         holder.unlockCanvasAndPost(canvas);
@@ -94,7 +95,7 @@ public class GameField extends SurfaceView {
         if(recordedEvents.size() == 2){
             selectedTileX = (int)((event.getX()-mapOffsetX)/grass.getWidth());
             selectedTileY = (int)((event.getY()-mapOffsetY)/grass.getHeight());
-            ((GameController)getContext()).onTileSelect(map[selectedTileX][selectedTileY]);
+            gameController.onTileSelect(gameController.getMap()[selectedTileX][selectedTileY]);
             redraw();
         }
     }
@@ -117,12 +118,20 @@ public class GameField extends SurfaceView {
     @Override
     public void draw(Canvas canvas){
         drawMap(canvas);
-        fixOffset(canvas);
         drawInfo(canvas);
+        fixOffset(canvas);
     }
 
-    private void drawInfo(Canvas canvas) {
-        //TODO - implement method
+    public void drawInfo(Canvas canvas) {
+        //apples
+        canvas.translate(0,0);
+        for(int i = 0; i < gameController.getApples(); i++){
+            canvas.drawBitmap(apple, (float)4+i*apple.getWidth(), (float)4, null);
+        }
+        //gold
+        for(int i = 0; i < gameController.getGold(); i++){
+            canvas.drawBitmap(coin, (float)4+i*coin.getWidth(), (float)apple.getHeight()+8, null);
+        }
     }
 
     private void fixOffset(Canvas canvas) {
@@ -138,12 +147,12 @@ public class GameField extends SurfaceView {
     private void drawMap(Canvas canvas) {
         canvas.translate(mapOffsetX, mapOffsetY);
         canvas.drawColor(Color.BLACK);
-        for(int posX = 0; posX < map.length; posX++){
-            for(int posY = 0; posY < map[posX].length; posY++){
+        for(int posX = 0; posX < gameController.getMap().length; posX++){
+            for(int posY = 0; posY < gameController.getMap()[posX].length; posY++){
                 // draw tiles
                 float x = posX * grass.getWidth();
                 float y = posY * grass.getHeight();
-                switch (map[posX][posY].terrainType){
+                switch (gameController.getMap()[posX][posY].terrainType){
                     case GRASS:
                         canvas.drawBitmap(grass, x, y, null);
                         break;
@@ -156,8 +165,8 @@ public class GameField extends SurfaceView {
                         break;
                 }
                 // draw units
-                if(map[posX][posY].unit != null){
-                    switch (map[posX][posY].unit.unitType){
+                if(gameController.getMap()[posX][posY].unit != null){
+                    switch (gameController.getMap()[posX][posY].unit.getUnitType()){
                         case WORKER:
                             canvas.drawBitmap(worker, x, y, null);
                             break;
@@ -174,7 +183,4 @@ public class GameField extends SurfaceView {
         }
     }
 
-    public void setMap(MapTile[][] map) {
-        this.map = map;
-    }
 }

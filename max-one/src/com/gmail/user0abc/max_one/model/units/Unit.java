@@ -11,12 +11,13 @@ import java.util.List;
  * Created by sergii.ivanov on 10/24/2014.
  */
 public abstract class Unit implements Serializable {
-    public UnitType unitType;
     public Player owner;
     public UnitAction currentAction;
     private int actionPoints;
 
     public abstract List<UnitActionType> allActions();
+
+    public abstract UnitType getUnitType();
 
     public int getActionPoints() {
         return actionPoints;
