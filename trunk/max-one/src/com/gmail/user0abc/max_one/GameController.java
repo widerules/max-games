@@ -31,9 +31,24 @@ public class GameController extends Activity {
         Intent intent = getIntent();
         game = GameStorage.getStorage().getGameContainer();
         gameField = new GameField(this);
-        gameField.setMap(game.map);
         setContentView(gameField);
         currentPlayer = game.players.get(0);
+    }
+
+    public void startTurn(){
+        gameField.redraw();
+    }
+
+    public MapTile[][] getMap(){
+        return game.map;
+    }
+
+    public int getApples(){
+     return 5;
+    }
+
+    public int getGold(){
+        return 5;
     }
 
     public void onTileSelect(MapTile tile){

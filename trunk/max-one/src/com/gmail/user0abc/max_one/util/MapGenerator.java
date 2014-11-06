@@ -3,8 +3,10 @@ package com.gmail.user0abc.max_one.util;
 import com.gmail.user0abc.max_one.model.*;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.terrain.TerrainType;
+import com.gmail.user0abc.max_one.model.units.*;
 import com.gmail.user0abc.max_one.model.units.Unit;
 import com.gmail.user0abc.max_one.model.units.UnitType;
+import com.gmail.user0abc.max_one.model.units.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,9 +79,8 @@ public class MapGenerator {
     }
 
     private static Unit makeWorker(Player player) {
-        Unit unit = new Unit();
+        Unit unit = new Worker();
         unit.owner = player;
-        unit.unitType = UnitType.WORKER;
         return unit;
     }
 
@@ -87,6 +88,8 @@ public class MapGenerator {
         MapTile tile = new MapTile();
         tile.explored = false;
         tile.building = null;
+        tile.x = x;
+        tile.y = y;
         tile.terrainType = (x * y * random.nextInt(100))%3 == 1 ? TerrainType.WATER : TerrainType.GRASS;
         if(tile.terrainType.equals(TerrainType.GRASS)){
             if(random.nextInt(100) < 10){
