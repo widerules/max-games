@@ -13,8 +13,8 @@ import com.gmail.user0abc.max_one.model.units.Unit;
 public class BuildTown extends UnitAction {
 
     @Override
-    public UnitActionType getActionType() {
-        return UnitActionType.BUILD_TOWN;
+    public ActionType getActionType() {
+        return ActionType.BUILD_TOWN;
     }
 
     @Override

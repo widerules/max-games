@@ -1,8 +1,8 @@
 package com.gmail.user0abc.max_one.model.units;
 
 import com.gmail.user0abc.max_one.model.Player;
+import com.gmail.user0abc.max_one.model.actions.ActionType;
 import com.gmail.user0abc.max_one.model.actions.UnitAction;
-import com.gmail.user0abc.max_one.model.actions.UnitActionType;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +15,7 @@ public abstract class Unit implements Serializable {
     public UnitAction currentAction;
     private int actionPoints;
 
-    public abstract List<UnitActionType> allActions();
+    public abstract List<ActionType> allActions();
 
     public abstract UnitType getUnitType();
 

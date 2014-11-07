@@ -1,6 +1,5 @@
 package com.gmail.user0abc.max_one.model.actions;
 
-import com.gmail.user0abc.max_one.R;
 import com.gmail.user0abc.max_one.exceptions.IllegalMove;
 import com.gmail.user0abc.max_one.model.GameContainer;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
@@ -14,7 +13,7 @@ import java.io.Serializable;
  */
 public abstract class UnitAction implements Serializable {
 
-    public abstract UnitActionType getActionType();
+    public abstract ActionType getActionType();
 
     public abstract boolean isAvailable(GameContainer game, MapTile selectedTile, Unit selectedUnit);
 

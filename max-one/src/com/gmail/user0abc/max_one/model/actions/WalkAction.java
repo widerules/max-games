@@ -10,8 +10,8 @@ import com.gmail.user0abc.max_one.model.units.Unit;
  */
 public class WalkAction extends UnitAction {
     @Override
-    public UnitActionType getActionType() {
-        return UnitActionType.MOVE_ACTION;
+    public ActionType getActionType() {
+        return ActionType.MOVE_ACTION;
     }
 
     @Override

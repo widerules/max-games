@@ -11,8 +11,8 @@ import com.gmail.user0abc.max_one.model.units.Unit;
 public class WaitAction extends UnitAction {
 
     @Override
-    public UnitActionType getActionType() {
-        return UnitActionType.WAIT_ACTION;
+    public ActionType getActionType() {
+        return ActionType.WAIT_ACTION;
     }
 
     @Override

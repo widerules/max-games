@@ -6,7 +6,7 @@ import com.gmail.user0abc.max_one.R;
  * Created by Sergey
  * at 11/6/14 12:50 AM
  */
-public enum UnitActionType{
+public enum ActionType {
     MOVE_ACTION,
     WAIT_ACTION,
     REMOVE_BUILDING,
