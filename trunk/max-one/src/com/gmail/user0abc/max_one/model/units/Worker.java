@@ -1,10 +1,8 @@
 package com.gmail.user0abc.max_one.model.units;
 
-import com.gmail.user0abc.max_one.model.actions.UnitAction;
-import com.gmail.user0abc.max_one.model.actions.UnitActionType;
+import com.gmail.user0abc.max_one.model.actions.ActionType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,16 +12,16 @@ import java.util.List;
 public class Worker extends Unit {
 
     @Override
-    public List<UnitActionType> allActions() {
-        List<UnitActionType> actions = new ArrayList<>();
-        actions.add(UnitActionType.MOVE_ACTION);
-        actions.add(UnitActionType.WAIT_ACTION);
-        actions.add(UnitActionType.BUILD_FARM);
-        actions.add(UnitActionType.BUILD_POST);
-        actions.add(UnitActionType.BUILD_TOWN);
-        actions.add(UnitActionType.REMOVE_BUILDING);
-        actions.add(UnitActionType.CLEAN_TERRAIN);
-        actions.add(UnitActionType.DELETE_UNIT);
+    public List<ActionType> allActions() {
+        List<ActionType> actions = new ArrayList<>();
+        actions.add(ActionType.MOVE_ACTION);
+        actions.add(ActionType.WAIT_ACTION);
+        actions.add(ActionType.BUILD_FARM);
+        actions.add(ActionType.BUILD_POST);
+        actions.add(ActionType.BUILD_TOWN);
+        actions.add(ActionType.REMOVE_BUILDING);
+        actions.add(ActionType.CLEAN_TERRAIN);
+        actions.add(ActionType.DELETE_UNIT);
         return actions;
     }
 
