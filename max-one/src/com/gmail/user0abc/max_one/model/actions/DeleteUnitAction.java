@@ -1,33 +1,29 @@
 package com.gmail.user0abc.max_one.model.actions;
 
+import com.gmail.user0abc.max_one.exceptions.IllegalMove;
 import com.gmail.user0abc.max_one.model.GameContainer;
-import com.gmail.user0abc.max_one.model.buildings.BuildingType;
-import com.gmail.user0abc.max_one.model.buildings.Town;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.units.Unit;
 
 /**
  * Created by Sergey
- * at 11/4/14 11:12 PM
+ * at 11/12/14 10:15 PM
  */
-public class BuildTown extends UnitAction {
+public class DeleteUnitAction extends UnitAction {
 
     @Override
     public AbilityType getActionType() {
-        return AbilityType.BUILD_TOWN;
+        return null;  //TODO implement method
     }
 
     @Override
     public boolean isAvailable(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        return selectedTile.building == null;
+        return false;  //TODO implement method
     }
 
     @Override
     public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        Town newTown = new Town();
-        newTown.buildingType = BuildingType.TOWN;
-        newTown.owner = selectedUnit.owner;
-        selectedTile.unit = null; // worker is consumed on creation
+        //TODO implement method
     }
 
     @Override
@@ -37,11 +33,11 @@ public class BuildTown extends UnitAction {
 
     @Override
     public void onCancel() {
-        // n/a
+        //TODO implement method
     }
 
     @Override
     public void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        // n/a
+        //TODO implement method
     }
 }

@@ -13,20 +13,29 @@ import java.io.Serializable;
  */
 public abstract class UnitAction implements Serializable {
 
-    public abstract ActionType getActionType();
+    public abstract AbilityType getActionType();
 
     public abstract boolean isAvailable(GameContainer game, MapTile selectedTile, Unit selectedUnit);
 
     /*
     * called when action icon tapped
+    * parameters should be saved within the action
     * */
-    public abstract void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) throws IllegalMove;
-
-    public abstract void onCancel(GameContainer game, MapTile selectedTile, Unit selectedUnit);
+    public abstract void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit);
+    /*
+    * Called when user defined details on action (like tile for move or attack)
+    * Accepts selected tile
+    * */
+    public abstract void onExecute(MapTile selectedTile);
 
     /*
-    * called when unit continues action automatically
+    * Called when user cancels action
     * */
-    public abstract void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit) throws IllegalMove;
+    public abstract void onCancel();
+
+    /*
+    * called when unit continues action automatically on the next turn
+    * */
+    public abstract void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit);
 
 }

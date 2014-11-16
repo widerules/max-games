@@ -12,5 +12,5 @@ public class GameContainer implements Serializable {
     public MapTile[][] map;
     public List<Player> players;
     public int seed;
-    public int movesCount=0;
+    public int turnsCount = 0;
 }

@@ -9,23 +9,29 @@ import com.gmail.user0abc.max_one.model.units.Unit;
  * at 11/5/14 11:09 PM
  */
 public class WalkAction extends UnitAction {
+
     @Override
-    public ActionType getActionType() {
-        return ActionType.MOVE_ACTION;
+    public AbilityType getActionType() {
+        return null;  //TODO implement method
     }
 
     @Override
     public boolean isAvailable(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        return selectedUnit.getActionPoints() > 0;
+        return false;  //TODO implement method
     }
 
     @Override
     public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        // TODO draw available movements
+        //TODO implement method
     }
 
     @Override
-    public void onCancel(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
+    public void onExecute(MapTile selectedTile) {
+        //TODO implement method
+    }
+
+    @Override
+    public void onCancel() {
         //TODO implement method
     }
 

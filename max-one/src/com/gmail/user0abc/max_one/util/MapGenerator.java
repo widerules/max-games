@@ -94,6 +94,8 @@ public class MapGenerator {
         if(tile.terrainType.equals(TerrainType.GRASS)){
             if(random.nextInt(100) < 10){
                 tile.terrainType = TerrainType.TREE;
+            }else{
+
             }
         }
         return tile;
