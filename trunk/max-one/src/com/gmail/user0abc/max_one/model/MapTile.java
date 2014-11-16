@@ -1,5 +1,7 @@
 package com.gmail.user0abc.max_one.model;
 
+import com.gmail.user0abc.max_one.model.units.Unit;
+
 import java.io.Serializable;
 
 /**

@@ -12,6 +12,7 @@ public class MapTile implements Serializable {
     public TerrainType terrainType;
     public boolean explored;
     public Building building;
+    public TileFeature tileFeature;
     public Unit unit;
     public int x;
     public int y;

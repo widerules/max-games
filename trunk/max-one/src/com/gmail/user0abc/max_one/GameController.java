@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.gmail.user0abc.max_one.model.GameContainer;
 import com.gmail.user0abc.max_one.model.Player;
-import com.gmail.user0abc.max_one.model.actions.ActionType;
+import com.gmail.user0abc.max_one.model.actions.AbilityType;
 import com.gmail.user0abc.max_one.model.actions.UnitAction;
 import com.gmail.user0abc.max_one.model.buildings.Building;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
@@ -13,7 +13,6 @@ import com.gmail.user0abc.max_one.model.units.Unit;
 import com.gmail.user0abc.max_one.util.GameStorage;
 import com.gmail.user0abc.max_one.view.GameField;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +39,26 @@ public class GameController extends Activity {
     }
 
     public void startTurn() {
+        resetActionPoints();
         gameField.redraw();
+    }
+
+    private void resetActionPoints() {
+        for(int x = 0; x < getMap().length; x++){
+            for(int y = 0; y < getMap()[0].length; y++){
+                if(getMap()[x][y].unit != null && getMap()[x][y].unit.owner.equals(currentPlayer)){
+                    resetUnitActionPoints(getMap()[x][y].unit, getMap()[x][y]);
+                }
+            }
+        }
+    }
+
+    private void resetUnitActionPoints(Unit unit, MapTile mapTile) {
+        if(unit.currentAction == null){
+            unit.setActionPoints(unit.getMaxActionPoints());
+        }else{
+            unit.currentAction.onContinue(game, mapTile, unit);
+        }
     }
 
     public MapTile[][] getMap() {
@@ -86,11 +104,17 @@ public class GameController extends Activity {
     }
 
     public void endTurn() {
-
+        int nextPlayerIndex = game.players.indexOf(currentPlayer) + 1;
+        if(nextPlayerIndex < game.players.size()){
+            currentPlayer = game.players.get(nextPlayerIndex);
+        }else{
+            game.players.get(0);
+            game.turnsCount++;
+        }
     }
 
 
-    public List<ActionType> getAvailableActions() {
+    public List<AbilityType> getAvailableActions() {
         if(selectedUnit != null){
             return selectedUnit.allActions();
         }
@@ -98,5 +122,25 @@ public class GameController extends Activity {
             return selectedBuilding.allActions();
         }
         return null;
+    }
+
+    public boolean isActionAvailable(AbilityType abilityType, MapTile tile) {
+        if(selectedUnit != null){
+            return selectedUnit.isActionAvailable(abilityType, tile);
+        }
+        if(selectedBuilding != null){
+            return selectedBuilding.isActionAvailable(abilityType, tile);
+        }
+        return false;
+    }
+
+    public void onActionButtonSelect(AbilityType abilityType) {
+        if(selectedUnit != null){
+            selectedUnit.execute(abilityType);
+        }
+        if(selectedBuilding != null){
+
+        }
+        //TODO - implement method
     }
 }

@@ -1,8 +1,9 @@
 package com.gmail.user0abc.max_one.model.units;
 
 import com.gmail.user0abc.max_one.model.Player;
-import com.gmail.user0abc.max_one.model.actions.ActionType;
+import com.gmail.user0abc.max_one.model.actions.AbilityType;
 import com.gmail.user0abc.max_one.model.actions.UnitAction;
+import com.gmail.user0abc.max_one.model.terrain.MapTile;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,13 +14,30 @@ import java.util.List;
 public abstract class Unit implements Serializable {
     public Player owner;
     public UnitAction currentAction;
-    private int actionPoints;
+    protected int actionPoints;
+    protected int maxActionPoints;
 
-    public abstract List<ActionType> allActions();
+    public abstract List<AbilityType> allActions();
 
     public abstract UnitType getUnitType();
 
     public int getActionPoints() {
         return actionPoints;
     }
+
+    public void setActionPoints(int actionPoints) {
+        this.actionPoints = actionPoints;
+    }
+
+    public int getMaxActionPoints() {
+        return maxActionPoints;
+    }
+
+    public void setMaxActionPoints(int maxActionPoints) {
+        this.maxActionPoints = maxActionPoints;
+    }
+
+    public abstract boolean isActionAvailable(AbilityType abilityType, MapTile tile);
+
+    public abstract void execute(AbilityType abilityType);
 }

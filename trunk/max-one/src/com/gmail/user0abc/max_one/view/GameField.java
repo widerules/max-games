@@ -7,7 +7,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import com.gmail.user0abc.max_one.GameController;
 import com.gmail.user0abc.max_one.R;
-import com.gmail.user0abc.max_one.model.actions.ActionType;
+import com.gmail.user0abc.max_one.model.actions.AbilityType;
+import com.gmail.user0abc.max_one.model.terrain.TileFeatureType;
 import com.gmail.user0abc.max_one.util.Logger;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class GameField extends SurfaceView {
     float mapOffsetX = 0, mapOffsetY = 0;
     Integer selectedTileX, selectedTileY;
     private GameController gameController;
+    private List<UiButton> actionButtons = new ArrayList<>();
 
     public GameField(Context context) {
         super(context);
@@ -36,6 +38,7 @@ public class GameField extends SurfaceView {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 //TODO implement method
+                redraw();
             }
 
             @Override
@@ -111,11 +114,29 @@ public class GameField extends SurfaceView {
             Logger.log("recorded events[" + i + "]=" + recordedEvents.get(i).getAction() + " " + recordedEvents.get(i).getX() + ", " + recordedEvents.get(i).getY());
         }
         if (recordedEvents.size() == 2) {
-            selectedTileX = (int) ((event.getX() - mapOffsetX) / grass.getWidth());
-            selectedTileY = (int) ((event.getY() - mapOffsetY) / grass.getHeight());
-            gameController.onTileSelect(gameController.getMap()[selectedTileX][selectedTileY]);
-            redraw();
+            UiButton button = getPressedButton(event.getX(), event.getY());
+            if (button != null){
+                button.setPressed(true);
+                gameController.onActionButtonSelect(button.getAbilityType());
+            }
+            // then select the tile
+            int newSelectedTileX = (int) ((event.getX() - mapOffsetX) / grass.getWidth());
+            int newSelectedTileY = (int) ((event.getY() - mapOffsetY) / grass.getHeight());
+            if(newSelectedTileX > -1 && newSelectedTileX < gameController.getMap().length
+                    && newSelectedTileY > -1 && newSelectedTileY < gameController.getMap()[0].length){
+                selectedTileY = newSelectedTileY;
+                selectedTileX = newSelectedTileX;
+                gameController.onTileSelect(gameController.getMap()[selectedTileX][selectedTileY]);
+                redraw();
+            }
         }
+    }
+
+    private UiButton getPressedButton(float x, float y) {
+        for(UiButton button:actionButtons){
+            if(button.isClicked(x,y))return button;
+        }
+        return null;
     }
 
     private void scrollMap(MotionEvent event) {
@@ -151,17 +172,26 @@ public class GameField extends SurfaceView {
     }
 
     private void drawUnitInfo(Canvas canvas) {
-        List<ActionType> availableActions = gameController.getAvailableActions();
+        List<AbilityType> availableActions = gameController.getAvailableActions();
         if (availableActions == null) return;
         for (int i = 0; i < availableActions.size(); i++) {
             float x = (float) 4 + i * actionPlate.getWidth();
             float y = (float) canvas.getHeight() - 4 - coin.getHeight();
-            canvas.drawBitmap(actionPlate, x, y, null);
-            canvas.drawBitmap(getActionImage(availableActions.get(i)), x, y, null);
+            UiButton button = new UiButton(
+                    getActionImage(availableActions.get(i)),
+                    getActionImage(availableActions.get(i)),
+                    getActionImage(availableActions.get(i)),
+                    actionPlate,
+                    x, y,
+                    availableActions.get(i)
+            );
+            button.setEnabled(gameController.isActionAvailable(availableActions.get(i), gameController.getMap()[selectedTileX][selectedTileY]));
+            actionButtons.add(button);
+            button.display(canvas);
         }
     }
 
-    private Bitmap getActionImage(ActionType availableAction) {
+    private Bitmap getActionImage(AbilityType availableAction) {
         Bitmap actionImage = null;
         switch (availableAction) {
             case MOVE_ACTION:
@@ -244,12 +274,28 @@ public class GameField extends SurfaceView {
                             break;
                     }
                 }
+
+                // draw features
+                if(gameController.getMap()[posX][posY].tileFeature != null){
+                    canvas.drawBitmap(getFeatureImage(gameController.getMap()[posX][posY].tileFeature.featureType),x,y,null);
+                }
             }
         }
         if (selectedTileY != null && selectedTileX != null) {
             float x = selectedTileX * grass.getWidth();
             float y = selectedTileY * grass.getHeight();
             canvas.drawBitmap(selection, x, y, null);
+        }
+    }
+
+    private Bitmap getFeatureImage(TileFeatureType featureType) {
+        switch (featureType){
+            case FEATURE_POSSIBLE_MOVE:
+                return actionMove;
+            case FEATURE_POSSIBLE_ATTACK:
+                return actionAttack;
+            default:
+                return null;
         }
     }
 

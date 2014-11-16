@@ -11,22 +11,27 @@ import com.gmail.user0abc.max_one.model.units.Unit;
 public class WaitAction extends UnitAction {
 
     @Override
-    public ActionType getActionType() {
-        return ActionType.WAIT_ACTION;
+    public AbilityType getActionType() {
+        return null;  //TODO implement method
     }
 
     @Override
     public boolean isAvailable(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        return true;
+        return false;  //TODO implement method
     }
 
     @Override
     public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        selectedUnit.currentAction = this;
+        //TODO implement method
     }
 
     @Override
-    public void onCancel(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
+    public void onExecute(MapTile selectedTile) {
+        //TODO implement method
+    }
+
+    @Override
+    public void onCancel() {
         //TODO implement method
     }
 
