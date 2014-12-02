@@ -17,25 +17,5 @@ public abstract class UnitAction implements Serializable {
 
     public abstract boolean isAvailable(GameContainer game, MapTile selectedTile, Unit selectedUnit);
 
-    /*
-    * called when action icon tapped
-    * parameters should be saved within the action
-    * */
-    public abstract void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit);
-    /*
-    * Called when user defined details on action (like tile for move or attack)
-    * Accepts selected tile
-    * */
-    public abstract void onExecute(MapTile selectedTile);
-
-    /*
-    * Called when user cancels action
-    * */
-    public abstract void onCancel();
-
-    /*
-    * called when unit continues action automatically on the next turn
-    * */
-    public abstract void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit);
-
+    public abstract void execute(GameContainer game, MapTile selectedTile, Unit selectedUnit) throws IllegalMove;
 }

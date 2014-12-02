@@ -7,8 +7,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import com.gmail.user0abc.max_one.GameController;
 import com.gmail.user0abc.max_one.R;
+import com.gmail.user0abc.max_one.events.GameEvent;
 import com.gmail.user0abc.max_one.model.actions.AbilityType;
 import com.gmail.user0abc.max_one.model.terrain.TileFeatureType;
+import com.gmail.user0abc.max_one.events.GameEventBus;
 import com.gmail.user0abc.max_one.util.Logger;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.List;
 public class GameField extends SurfaceView {
     private List<MotionEvent> recordedEvents = new ArrayList<>();
     private final SurfaceHolder holder;
-    private Bitmap grass, water, worker, selection, tree, coin, apple, tint;
+    private Bitmap grass, water, worker, selection, tree, coin, apple, tint, camp;
     private Bitmap endTurn, actionPlate, actionMove, actionWait, actionRemove, actionClean, actionAttack,
             actionDelete, actionTown, actionFarm, actionTrade;
     float mapOffsetX = 0, mapOffsetY = 0;
@@ -63,6 +65,7 @@ public class GameField extends SurfaceView {
         coin = BitmapFactory.decodeResource(getResources(), R.drawable.coin);
         apple = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
         tint = BitmapFactory.decodeResource(getResources(), R.drawable.tint);
+        camp =BitmapFactory.decodeResource(getResources(), R.drawable.camp);
         actionPlate = BitmapFactory.decodeResource(getResources(), R.drawable.action_plate);
         endTurn = BitmapFactory.decodeResource(getResources(), R.drawable.end_turn);
         actionMove = BitmapFactory.decodeResource(getResources(), R.drawable.walk);
@@ -118,23 +121,25 @@ public class GameField extends SurfaceView {
             if (button != null){
                 button.setPressed(true);
                 gameController.onActionButtonSelect(button.getAbilityType());
-            }
-            // then select the tile
-            int newSelectedTileX = (int) ((event.getX() - mapOffsetX) / grass.getWidth());
-            int newSelectedTileY = (int) ((event.getY() - mapOffsetY) / grass.getHeight());
-            if(newSelectedTileX > -1 && newSelectedTileX < gameController.getMap().length
-                    && newSelectedTileY > -1 && newSelectedTileY < gameController.getMap()[0].length){
-                selectedTileY = newSelectedTileY;
-                selectedTileX = newSelectedTileX;
-                gameController.onTileSelect(gameController.getMap()[selectedTileX][selectedTileY]);
                 redraw();
+            }else{
+                // then select the tile
+                int newSelectedTileX = (int) ((event.getX() - mapOffsetX) / grass.getWidth());
+                int newSelectedTileY = (int) ((event.getY() - mapOffsetY) / grass.getHeight());
+                if(newSelectedTileX > -1 && newSelectedTileX < gameController.getMap().length
+                        && newSelectedTileY > -1 && newSelectedTileY < gameController.getMap()[0].length){
+                    selectedTileY = newSelectedTileY;
+                    selectedTileX = newSelectedTileX;
+                    gameController.onTileSelect(gameController.getMap()[selectedTileX][selectedTileY]);
+                    redraw();
+                }
             }
         }
     }
 
     private UiButton getPressedButton(float x, float y) {
         for(UiButton button:actionButtons){
-            if(button.isClicked(x,y))return button;
+            if(button.isHit(x, y))return button;
         }
         return null;
     }
@@ -145,6 +150,11 @@ public class GameField extends SurfaceView {
             float endY = event.getY();
             float startX = event.getHistoricalX(0);
             float startY = event.getHistoricalY(0);
+            GameEventBus.getBus().fire(
+                    new GameEvent(
+                            GameEventBus.GameEventType.ScrollMap,
+                            null)
+            );
             Canvas canvas = getHolder().lockCanvas(null);
             mapOffsetX += endX - startX;
             mapOffsetY += endY - startY;
@@ -245,7 +255,8 @@ public class GameField extends SurfaceView {
     }
 
     private void drawMap(Canvas canvas) {
-
+        Paint playerStyle = new Paint();
+        playerStyle.setShadowLayer(3f, 0, 0, Color.BLUE);
         canvas.drawColor(Color.BLACK);
         for (int posX = 0; posX < gameController.getMap().length; posX++) {
             for (int posY = 0; posY < gameController.getMap()[posX].length; posY++) {
@@ -264,11 +275,29 @@ public class GameField extends SurfaceView {
                         canvas.drawBitmap(tree, x, y, null);
                         break;
                 }
+                // draw buildings
+                if(gameController.getMap()[posX][posY].building != null){
+                    switch (gameController.getMap()[posX][posY].building.getBuildingType()){
+                        case TOWN:
+                            canvas.drawBitmap(actionTown, x, y, playerStyle);
+                            break;
+                        case FARM:
+                            canvas.drawBitmap(actionFarm, x, y, playerStyle);
+                            break;
+                        case CAMP:
+                            canvas.drawBitmap(camp, x, y, playerStyle);
+                            break;
+                        case SHOP:
+                            canvas.drawBitmap(actionTrade, x, y, playerStyle);
+                            break;
+
+                    }
+                }
                 // draw units
                 if (gameController.getMap()[posX][posY].unit != null) {
                     switch (gameController.getMap()[posX][posY].unit.getUnitType()) {
                         case WORKER:
-                            canvas.drawBitmap(worker, x, y, null);
+                            canvas.drawBitmap(worker, x, y, playerStyle);
                             break;
                         default:
                             break;

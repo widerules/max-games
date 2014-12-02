@@ -16,6 +16,8 @@ public abstract class Unit implements Serializable {
     public UnitAction currentAction;
     protected int actionPoints;
     protected int maxActionPoints;
+    protected int applesCost;
+    protected int goldCost;
 
     public abstract List<AbilityType> allActions();
 
@@ -39,5 +41,13 @@ public abstract class Unit implements Serializable {
 
     public abstract boolean isActionAvailable(AbilityType abilityType, MapTile tile);
 
-    public abstract void execute(AbilityType abilityType);
+    public abstract UnitAction getAction(AbilityType abilityType);
+
+    public int getApplesCost() {
+        return applesCost;
+    }
+
+    public int getGoldCost() {
+        return goldCost;
+    }
 }

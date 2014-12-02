@@ -2,6 +2,7 @@ package com.gmail.user0abc.max_one.model.actions;
 
 import com.gmail.user0abc.max_one.exceptions.IllegalMove;
 import com.gmail.user0abc.max_one.model.GameContainer;
+import com.gmail.user0abc.max_one.model.buildings.Farm;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.units.Unit;
 
@@ -22,22 +23,22 @@ public class BuildFarmAction extends UnitAction {
     }
 
     @Override
-    public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        //TODO implement method
+    public void execute(GameContainer game, MapTile selectedTile, Unit selectedUnit) throws IllegalMove {
+        if(selectedTile.building != null){
+            throw new IllegalMove("Tile is already built up");
+        }
+        if(game.currentPlayer == null){
+            throw new IllegalMove("Player not selected");
+        }
+        if(game.currentPlayer.gold < 1){
+            throw new IllegalMove("Not enough gold");
+        }
+        if(selectedUnit.getActionPoints() < 1){
+            throw new IllegalMove("No actions point to build");
+        }
+        Farm farm = new Farm();
+        farm.setOwner(game.currentPlayer);
+        selectedTile.building =  farm;
     }
 
-    @Override
-    public void onExecute(MapTile selectedTile) {
-        //TODO implement method
-    }
-
-    @Override
-    public void onCancel() {
-        //TODO implement method
-    }
-
-    @Override
-    public void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        //TODO implement method
-    }
 }

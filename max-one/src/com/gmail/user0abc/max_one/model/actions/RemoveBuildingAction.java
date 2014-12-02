@@ -1,6 +1,5 @@
 package com.gmail.user0abc.max_one.model.actions;
 
-import com.gmail.user0abc.max_one.exceptions.IllegalMove;
 import com.gmail.user0abc.max_one.model.GameContainer;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.units.Unit;
@@ -22,22 +21,8 @@ public class RemoveBuildingAction extends UnitAction {
     }
 
     @Override
-    public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
+    public void execute(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
         //TODO implement method
     }
 
-    @Override
-    public void onExecute(MapTile selectedTile) {
-        //TODO implement method
-    }
-
-    @Override
-    public void onCancel() {
-        //TODO implement method
-    }
-
-    @Override
-    public void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        //TODO implement method
-    }
 }

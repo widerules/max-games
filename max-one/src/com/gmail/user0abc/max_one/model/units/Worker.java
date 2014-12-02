@@ -1,8 +1,11 @@
 package com.gmail.user0abc.max_one.model.units;
 
+import com.gmail.user0abc.max_one.exceptions.NotImplementedException;
 import com.gmail.user0abc.max_one.model.actions.*;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.terrain.TerrainType;
+import com.gmail.user0abc.max_one.util.GameMessage;
+import com.gmail.user0abc.max_one.util.GameMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,8 @@ public class Worker extends Unit {
 
     public Worker() {
         maxActionPoints = 4;
+        goldCost = 0;
+        applesCost = 1;
     }
 
     @Override
@@ -44,34 +49,19 @@ public class Worker extends Unit {
             case BUILD_FARM: return tile.building == null && actionPoints > 0 && tile.terrainType.equals(TerrainType.GRASS);
             case BUILD_POST: return tile.building == null && actionPoints > 0 && tile.terrainType.equals(TerrainType.GRASS);
             case CLEAN_TERRAIN: return tile.terrainType.equals(TerrainType.TREE) && actionPoints > 0;
-            case REMOVE_BUILDING: return tile.building != null && tile.building.owner.equals(this.owner) && actionPoints > 0;
+            case REMOVE_BUILDING: return tile.building != null && tile.building.getOwner().equals(this.owner) && actionPoints > 0;
             case DELETE_UNIT: return true;
         }
         return false;
     }
 
     @Override
-    public void execute(AbilityType abilityType) {
-        getAction(abilityType).onActivate();
-    }
-
     public UnitAction getAction(AbilityType abilityType) {
         if(currentAction == null){
-            switch (abilityType) {
-                case WAIT_ACTION:
-                    currentAction = new WaitAction();
-                case MOVE_ACTION:
-                    currentAction = new MoveAction();
-                case BUILD_FARM:
-                    currentAction = new BuildFarmAction();
-                case BUILD_POST:
-                    currentAction = new BuildPostAction();
-                case CLEAN_TERRAIN:
-                    currentAction = new CleanTerrainAction();
-                case REMOVE_BUILDING:
-                    currentAction = new RemoveBuildingAction();
-                case DELETE_UNIT:
-                    currentAction = new DeleteUnitAction();
+            try {
+                currentAction = ActionFactory.createAction(abilityType);
+            } catch (NotImplementedException e) {
+                GameMessages.error(e);
             }
         }
         return currentAction;
