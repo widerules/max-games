@@ -3,6 +3,7 @@ package com.gmail.user0abc.max_one;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import com.gmail.user0abc.max_one.exceptions.IllegalMove;
 import com.gmail.user0abc.max_one.model.GameContainer;
 import com.gmail.user0abc.max_one.model.Player;
 import com.gmail.user0abc.max_one.model.actions.AbilityType;
@@ -10,6 +11,7 @@ import com.gmail.user0abc.max_one.model.actions.UnitAction;
 import com.gmail.user0abc.max_one.model.buildings.Building;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.units.Unit;
+import com.gmail.user0abc.max_one.util.GameMessages;
 import com.gmail.user0abc.max_one.util.GameStorage;
 import com.gmail.user0abc.max_one.view.GameField;
 
@@ -26,7 +28,7 @@ public class GameController extends Activity {
     private Player currentPlayer;
     private Unit selectedUnit;
     private Building selectedBuilding;
-    private UnitAction selectedAction;
+    private MapTile selectedTile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,28 +38,37 @@ public class GameController extends Activity {
         gameField = new GameField(this);
         setContentView(gameField);
         currentPlayer = game.players.get(0);
+        startTurn();
     }
 
     public void startTurn() {
-        resetActionPoints();
-        gameField.redraw();
+        game.currentPlayer = currentPlayer;
+        calculateMap();
     }
 
-    private void resetActionPoints() {
+    private void calculateMap() {
+        int applesBalance = 0;
+        int goldBalance = 0;
         for(int x = 0; x < getMap().length; x++){
             for(int y = 0; y < getMap()[0].length; y++){
                 if(getMap()[x][y].unit != null && getMap()[x][y].unit.owner.equals(currentPlayer)){
-                    resetUnitActionPoints(getMap()[x][y].unit, getMap()[x][y]);
+                    try {
+                        resetUnitActionPoints(getMap()[x][y].unit, getMap()[x][y]);
+                    } catch (IllegalMove illegalMove) {
+                        GameMessages.add(getMap()[x][y], illegalMove.getLocalizedMessage());
+                    }
+                    applesBalance -= getMap()[x][y].unit.getApplesCost();
+                    goldBalance -= getMap()[x][y].unit.getGoldCost();
                 }
             }
         }
     }
 
-    private void resetUnitActionPoints(Unit unit, MapTile mapTile) {
-        if(unit.currentAction == null){
-            unit.setActionPoints(unit.getMaxActionPoints());
-        }else{
-            unit.currentAction.onContinue(game, mapTile, unit);
+
+    private void resetUnitActionPoints(Unit unit, MapTile mapTile) throws IllegalMove {
+        unit.setActionPoints(unit.getMaxActionPoints());
+        if(unit.currentAction != null){
+            unit.currentAction.execute(game, mapTile, unit);
         }
     }
 
@@ -74,7 +85,7 @@ public class GameController extends Activity {
     }
 
     public void onTileSelect(MapTile tile) {
-
+        selectedTile = tile;
         if (selectedUnit == null) { // no unit selected
             if (tile.unit != null) { // tile has unit
                 selectedUnit = tile.unit;
@@ -136,10 +147,15 @@ public class GameController extends Activity {
 
     public void onActionButtonSelect(AbilityType abilityType) {
         if(selectedUnit != null){
-            selectedUnit.execute(abilityType);
+            UnitAction action = selectedUnit.getAction(abilityType);
+            try {
+                action.execute(game, selectedTile, selectedUnit);
+            } catch (IllegalMove illegalMove) {
+                GameMessages.add(selectedTile, illegalMove.getLocalizedMessage());
+            }
         }
         if(selectedBuilding != null){
-
+            selectedBuilding.execute(abilityType);
         }
         //TODO - implement method
     }

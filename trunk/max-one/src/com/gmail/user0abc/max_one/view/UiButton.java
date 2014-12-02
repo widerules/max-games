@@ -24,6 +24,7 @@ public class UiButton {
         this.iconDisabled = iconDisabled;
         this.posX = posX;
         this.posY = posY;
+        abilityType = type;
     }
 
     public boolean isEnabled(){
@@ -72,7 +73,7 @@ public class UiButton {
         }
     }
 
-    public boolean isClicked(float x, float y){
+    public boolean isHit(float x, float y){
         boolean isHit = ( x >= posX
                         && x <= (posX + actionPlate.getWidth())
                         && y >= posY

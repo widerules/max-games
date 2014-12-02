@@ -21,22 +21,8 @@ public class WaitAction extends UnitAction {
     }
 
     @Override
-    public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
+    public void execute(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
         //TODO implement method
     }
 
-    @Override
-    public void onExecute(MapTile selectedTile) {
-        //TODO implement method
-    }
-
-    @Override
-    public void onCancel() {
-        //TODO implement method
-    }
-
-    @Override
-    public void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        //TODO implement method
-    }
 }

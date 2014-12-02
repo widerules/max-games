@@ -13,4 +13,5 @@ public class GameContainer implements Serializable {
     public List<Player> players;
     public int seed;
     public int turnsCount = 0;
+    public Player currentPlayer;
 }

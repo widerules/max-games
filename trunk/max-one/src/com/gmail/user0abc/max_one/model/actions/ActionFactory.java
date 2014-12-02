@@ -1,12 +1,14 @@
 package com.gmail.user0abc.max_one.model.actions;
 
+import com.gmail.user0abc.max_one.exceptions.NotImplementedException;
+
 /**
  * Created by Sergey
  * at 11/12/14 10:06 PM
  */
 public class ActionFactory {
 
-    public static UnitAction createAction(AbilityType abilityType){
+    public static UnitAction createAction(AbilityType abilityType) throws NotImplementedException {
         switch (abilityType){
             case REMOVE_BUILDING:
                 return new RemoveBuildingAction();
@@ -27,7 +29,7 @@ public class ActionFactory {
             case WAIT_ACTION:
                 return new WaitAction();
             default:
-                return null;
+                throw new NotImplementedException("action "+abilityType+" not implemented");
         }
     }
 

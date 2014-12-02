@@ -1,7 +1,7 @@
 package com.gmail.user0abc.max_one.model.actions;
 
+import com.gmail.user0abc.max_one.exceptions.IllegalMove;
 import com.gmail.user0abc.max_one.model.GameContainer;
-import com.gmail.user0abc.max_one.model.buildings.BuildingType;
 import com.gmail.user0abc.max_one.model.buildings.Town;
 import com.gmail.user0abc.max_one.model.terrain.MapTile;
 import com.gmail.user0abc.max_one.model.units.Unit;
@@ -23,25 +23,19 @@ public class BuildTown extends UnitAction {
     }
 
     @Override
-    public void onActivate(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        Town newTown = new Town();
-        newTown.buildingType = BuildingType.TOWN;
-        newTown.owner = selectedUnit.owner;
-        selectedTile.unit = null; // worker is consumed on creation
+    public void execute(GameContainer game, MapTile selectedTile, Unit selectedUnit) throws IllegalMove {
+        if(game.currentPlayer == null){
+            throw new IllegalMove("Player not selected");
+        }
+        if(selectedTile.building != null){
+            throw new IllegalMove("Tile is built up");
+        }
+        if(selectedUnit.getActionPoints() < 1){
+            throw new IllegalMove("No action points");
+        }
+        Town town = new Town();
+        town.setOwner(game.currentPlayer);
+        selectedTile.building = town;
     }
 
-    @Override
-    public void onExecute(MapTile selectedTile) {
-        //TODO implement method
-    }
-
-    @Override
-    public void onCancel() {
-        // n/a
-    }
-
-    @Override
-    public void onContinue(GameContainer game, MapTile selectedTile, Unit selectedUnit) {
-        // n/a
-    }
 }
